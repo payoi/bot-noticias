@@ -123,6 +123,19 @@ def limpiar_html(texto):
     texto = re.sub(r'http[s]?://\S+', '', texto)
     texto = re.sub(r'[\[\]{}]', '', texto)
     texto = re.sub(r'\s+', ' ', texto)
+    
+    # Eliminar frases comunes de RSS al final
+    frases_eliminar = [
+        r'The post.*appeared first on.*$',
+        r'La entrada.*aparece primero en.*$',
+        r'Leer más.*$',
+        r'Seguir leyendo.*$',
+        r'Continuar leyendo.*$',
+        r'\.\.\.$',
+    ]
+    for frase in frases_eliminar:
+        texto = re.sub(frase, '', texto, flags=re.IGNORECASE)
+    
     return texto.strip()
 
 
@@ -281,7 +294,16 @@ async def publicar_noticias(bot):
                 print(f"   📰 {titulo[:50]}...")
                 
                 img_url = obtener_imagen(entry)
-                resumen_corto = resumen[:250] + "..." if len(resumen) > 250 else resumen
+                # Cortar en el último punto antes de 280 caracteres
+if len(resumen) > 280:
+    resumen_corto = resumen[:280]
+    ultimo_punto = resumen_corto.rfind('.')
+    if ultimo_punto > 100:
+        resumen_corto = resumen_corto[:ultimo_punto + 1]
+    else:
+        resumen_corto = resumen_corto.rsplit(' ', 1)[0] + "..."
+else:
+    resumen_corto = resumen
                 mensaje = formatear_mensaje_noticia(titulo.upper(), resumen_corto, nombre_fuente)
                 
                 try:
