@@ -29,26 +29,9 @@ INTERVALO = int(os.getenv('INTERVALO', '1800'))
 RSS_URLS = [
     "https://www.bancaynegocios.com/feed/",
     "https://finanzasdigital.com/feed/",
-    "https://www.elnacional.com/feed/",
-    "https://talcualdigital.com/feed/",
-    "https://efectococuyo.com/feed/",
+    "https://www.telesurtv.net/feed/",
 ]
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# FUENTES TWITTER (VIA NITTER RSS)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-TWITTER_CUENTAS = [
-    {"url": "https://nitter.poast.org/EconViews/rss", "nombre": "Econoviews"},
-    {"url": "https://nitter.poast.org/RonaldBalza/rss", "nombre": "Ronald Balza"},
-    {"url": "https://nitter.poast.org/asdrubal/rss", "nombre": "Asdrúbal Oliveros"},
-    {"url": "https://nitter.poast.org/humbertogr/rss", "nombre": "Henkel García"},
-    {"url": "https://nitter.poast.org/joseeguerra/rss", "nombre": "José Guerra"},
-    {"url": "https://nitter.poast.org/anabcoello/rss", "nombre": "Anabel Coello"},
-    {"url": "https://nitter.poast.org/BancayNegocios/rss", "nombre": "Banca y Negocios"},
-    {"url": "https://nitter.poast.org/monitor_dolar/rss", "nombre": "Monitor Dólar"},
-    {"url": "https://nitter.poast.org/ovallesuy/rss", "nombre": "Omar Vallés"},
-]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # NOMBRES DE FUENTES
@@ -57,49 +40,51 @@ TWITTER_CUENTAS = [
 NOMBRES_FUENTES = {
     "bancaynegocios.com": "Banca y Negocios",
     "finanzasdigital.com": "Finanzas Digital",
-    "elnacional.com": "El Nacional",
-    "talcualdigital.com": "Tal Cual",
-    "efectococuyo.com": "Efecto Cocuyo",
+    "telesurtv.net": "TeleSUR",
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# FILTROS PARA NOTICIAS
+# FILTROS POR FUENTE
 # ═══════════════════════════════════════════════════════════════════════════════
 
-PALABRAS_CLAVE_NOTICIAS = [
+# Filtro para Banca y Negocios + Finanzas Digital
+FILTRO_ECONOMIA = [
+    "venezuela", "venezolano", "venezolana", "caracas",
+    "economía", "economia", "económico", "económica",
+    "finanzas", "financiero", "financiera",
+    "banca", "banco", "bancos", "bancario", "bancaria",
+    "banesco", "mercantil", "provincial", "bnc", "bod", "bicentenario",
+    "bcv", "banco central", "sudeban",
+    "dólar", "dolar", "bolívar", "bolivar", "divisas",
+    "tipo de cambio", "tasa de cambio", "paralelo", "oficial",
+    "inflación", "inflacion", "devaluación", "devaluacion",
+    "pago móvil", "pago movil", "pagomovil", "c2p", "p2p",
+    "tarjeta", "crédito", "credito", "débito", "debito",
+    "transferencia", "remesas", "cuenta",
+    "inversión", "inversion", "mercado", "bolsa", "acciones",
+    "pdvsa", "petróleo", "petroleo", "gasolina",
+    "seniat", "impuesto", "iva", "islr", "tributo",
+    "usdt", "binance", "criptomoneda", "bitcoin", "petro",
+]
+
+# Filtro para TeleSUR
+FILTRO_TELESUR = [
+    # Política Venezuela
     "venezuela", "venezolano", "venezolana", "caracas", "maduro",
-    "economía", "economia", "económico", "inflación", "inflacion",
-    "pib", "crecimiento", "recesión", "devaluación",
-    "finanzas", "financiero", "inversión", "inversion",
-    "bolsa", "acciones", "mercado", "divisas", "dólar", "dolar", "euro",
-    "tipo de cambio", "tasa de cambio", "bcv", "banco central",
-    "banca", "banco", "bancos", "banesco", "mercantil", "provincial",
-    "bnc", "bod", "bicentenario", "bancario",
-    "cuenta", "tarjeta", "crédito", "credito", "débito", "debito",
-    "pago móvil", "pago movil", "pagomovil", "c2p", "p2p", "p2c",
-    "patria", "carnet de la patria", "petro", "criptomoneda", "bitcoin",
-    "usdt", "binance", "remesas", "transferencia", "sudeban",
-    "cantv", "movistar", "digitel", "corpoelec", "electricidad",
-    "pdvsa", "gasolina", "combustible",
-    "tecnología", "tecnologia", "internet", "telecomunicaciones",
-    "seniat", "impuesto", "iva", "islr", "tributo", "fiscal",
-    "petroleo", "petróleo",
+    "gobierno", "asamblea", "diputado", "ministro", "ministerio",
+    "política", "politica", "político", "elecciones", "votación",
+    "constitución", "ley", "decreto", "gaceta",
+    "oposición", "oposicion", "sanciones",
+    
+    # Tecnología
+    "tecnología", "tecnologia", "internet", "digital",
+    "telecomunicaciones", "conectividad", "fibra óptica",
+    "cantv", "movistar", "digitel", "satelital",
+    "5g", "4g", "redes", "ciberseguridad",
+    "app", "aplicación", "software", "innovación",
+    "inteligencia artificial", "starlink",
 ]
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# FILTROS PARA TWEETS
-# ═══════════════════════════════════════════════════════════════════════════════
-
-PALABRAS_CLAVE_TWEETS = [
-    "venezuela", "bcv", "dólar", "dolar", "bolívar", "bolivar",
-    "inflación", "inflacion", "economía", "economia",
-    "banco", "banca", "sudeban", "finanzas",
-    "pago", "remesas", "salario", "sueldo", "mínimo",
-    "petróleo", "petroleo", "pdvsa", "gasolina",
-    "importación", "exportación", "producción",
-    "tipo de cambio", "paralelo", "oficial",
-    "crisis", "escasez", "desabastecimiento",
-]
 
 IMAGENES_BLOQUEADAS = [
     'facebook', 'twitter', 'whatsapp', 'instagram', 'linkedin',
@@ -146,20 +131,25 @@ def cortar_resumen(resumen):
     return resumen
 
 
-def es_noticia_relevante(titulo, resumen):
+def es_noticia_relevante(titulo, resumen, fuente):
+    """Filtra noticias según la fuente"""
     texto_completo = f"{titulo} {resumen}".lower()
-    for palabra in PALABRAS_CLAVE_NOTICIAS:
+    
+    # Seleccionar filtro según la fuente
+    if fuente == "TeleSUR":
+        palabras = FILTRO_TELESUR
+    else:
+        # Banca y Negocios, Finanzas Digital
+        palabras = FILTRO_ECONOMIA
+    
+    for palabra in palabras:
         if palabra.lower() in texto_completo:
             return True
+    
     return False
 
 
-def es_tweet_relevante(texto):
-    texto_lower = texto.lower()
-    for palabra in PALABRAS_CLAVE_TWEETS:
-        if palabra.lower() in texto_lower:
-            return True
-    return False
+
 
 
 def noticia_ya_enviada(url):
@@ -253,14 +243,6 @@ def formatear_mensaje_noticia(titulo, resumen, fuente):
     return mensaje
 
 
-def formatear_mensaje_tweet(texto, autor):
-    mensaje = (
-        f"🐦 <b>{autor}</b>\n\n"
-        f"{texto}\n\n"
-        f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"📲 <b>@notiglobalve</b>"
-    )
-    return mensaje
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -295,7 +277,7 @@ async def publicar_noticias(bot):
                 titulo = limpiar_html(entry.title)
                 resumen = limpiar_html(entry.get('description') or entry.get('summary') or "")
                 
-                if not es_noticia_relevante(titulo, resumen):
+                if not es_noticia_relevante(titulo, resumen, nombre_fuente):
                     continue
                 
                 print(f"   📰 {titulo[:50]}...")
@@ -335,70 +317,6 @@ async def publicar_noticias(bot):
     return noticias_publicadas
 
 
-async def publicar_tweets(bot):
-    print(f"\n{'─'*50}")
-    print("🐦 REVISANDO TWITTER")
-    print(f"{'─'*50}")
-    
-    tweets_publicados = 0
-    
-    for cuenta in TWITTER_CUENTAS:
-        try:
-            print(f"\n🔍 @{cuenta['nombre']}")
-            
-            feed = feedparser.parse(cuenta['url'])
-            
-            if not feed.entries:
-                print(f"   ⚠️ Sin tweets")
-                continue
-            
-            for entry in feed.entries[:1]:
-                url = entry.link
-                
-                if noticia_ya_enviada(url):
-                    continue
-                
-                texto_tweet = limpiar_html(entry.title)
-                
-                if not es_tweet_relevante(texto_tweet):
-                    continue
-                
-                print(f"   🐦 {texto_tweet[:50]}...")
-                
-                img_url = obtener_imagen(entry)
-                mensaje = formatear_mensaje_tweet(texto_tweet, cuenta['nombre'])
-                
-                try:
-                    if img_url:
-                        await bot.send_photo(
-                            chat_id=CHAT_ID,
-                            photo=img_url,
-                            caption=mensaje,
-                            parse_mode=ParseMode.HTML
-                        )
-                        print(f"   ✅ Tweet publicado con imagen")
-                    else:
-                        await bot.send_message(
-                            chat_id=CHAT_ID,
-                            text=mensaje,
-                            parse_mode=ParseMode.HTML,
-                            disable_web_page_preview=True
-                        )
-                        print(f"   ✅ Tweet publicado")
-                    
-                    registrar_noticia(url)
-                    tweets_publicados += 1
-                    await asyncio.sleep(5)
-                    
-                except Exception as e:
-                    print(f"   ❌ Error: {e}")
-        
-        except Exception as e:
-            print(f"   ❌ Error en cuenta: {e}")
-    
-    return tweets_publicados
-
-
 async def ejecutar_ciclo():
     bot = Bot(token=TOKEN)
     
@@ -409,12 +327,10 @@ async def ejecutar_ciclo():
     print(f"{'═'*60}")
     
     noticias = await publicar_noticias(bot)
-    tweets = await publicar_tweets(bot)
     
     print(f"\n{'─'*50}")
     print(f"📊 RESUMEN:")
     print(f"   📰 Noticias publicadas: {noticias}")
-    print(f"   🐦 Tweets publicados: {tweets}")
     print(f"{'─'*50}")
 
 
@@ -424,11 +340,10 @@ async def ejecutar_ciclo():
 
 if __name__ == "__main__":
     print("="*60)
-    print("   📰 BOT DE NOTICIAS VENEZUELA v2.1")
+    print("   📰 BOT DE NOTICIAS VENEZUELA v2.2")
     print("="*60)
     print(f"   📢 Canal: {CHAT_ID}")
     print(f"   📡 Fuentes RSS: {len(RSS_URLS)}")
-    print(f"   🐦 Cuentas Twitter: {len(TWITTER_CUENTAS)}")
     print(f"   ⏰ Intervalo: {INTERVALO // 60} minutos")
     print("="*60)
     
