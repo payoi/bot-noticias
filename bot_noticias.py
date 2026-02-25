@@ -11,7 +11,7 @@ import re
 from html import unescape
 from telegram import Bot
 from telegram.constants import ParseMode
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONFIGURACIÓN PRINCIPAL
@@ -20,7 +20,7 @@ from datetime import datetime
 TOKEN = os.getenv('TOKEN_TELEGRAM', "7933470868:AAE2vYm73cJLTcxMlLDzdVS7oE5Pe2g7xJs")
 CHAT_ID = os.getenv('CHAT_ID', "@notiglobalve")
 HISTORIAL_FILE = "enviados.txt"
-INTERVALO = int(os.getenv('INTERVALO', '1800'))  # 30 minutos
+INTERVALO = int(os.getenv('INTERVALO', '1800'))
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # FUENTES RSS DE NOTICIAS
@@ -39,15 +39,12 @@ RSS_URLS = [
 # ═══════════════════════════════════════════════════════════════════════════════
 
 TWITTER_CUENTAS = [
-    # Economistas
     {"url": "https://nitter.poast.org/EconViews/rss", "nombre": "Econoviews"},
     {"url": "https://nitter.poast.org/RonaldBalza/rss", "nombre": "Ronald Balza"},
     {"url": "https://nitter.poast.org/asdrubal/rss", "nombre": "Asdrúbal Oliveros"},
     {"url": "https://nitter.poast.org/humbertogr/rss", "nombre": "Henkel García"},
     {"url": "https://nitter.poast.org/joseeguerra/rss", "nombre": "José Guerra"},
     {"url": "https://nitter.poast.org/anabcoello/rss", "nombre": "Anabel Coello"},
-    
-    # Medios económicos
     {"url": "https://nitter.poast.org/BancayNegocios/rss", "nombre": "Banca y Negocios"},
     {"url": "https://nitter.poast.org/monitor_dolar/rss", "nombre": "Monitor Dólar"},
     {"url": "https://nitter.poast.org/ovallesuy/rss", "nombre": "Omar Vallés"},
@@ -131,12 +128,22 @@ def limpiar_html(texto):
         r'Leer más.*$',
         r'Seguir leyendo.*$',
         r'Continuar leyendo.*$',
-        r'\.\.\.$',
     ]
     for frase in frases_eliminar:
         texto = re.sub(frase, '', texto, flags=re.IGNORECASE)
     
     return texto.strip()
+
+
+def cortar_resumen(resumen):
+    if len(resumen) > 280:
+        resumen_corto = resumen[:280]
+        ultimo_punto = resumen_corto.rfind('.')
+        if ultimo_punto > 100:
+            return resumen_corto[:ultimo_punto + 1]
+        else:
+            return resumen_corto.rsplit(' ', 1)[0] + "..."
+    return resumen
 
 
 def es_noticia_relevante(titulo, resumen):
@@ -294,16 +301,7 @@ async def publicar_noticias(bot):
                 print(f"   📰 {titulo[:50]}...")
                 
                 img_url = obtener_imagen(entry)
-                # Cortar en el último punto antes de 280 caracteres
-if len(resumen) > 280:
-    resumen_corto = resumen[:280]
-    ultimo_punto = resumen_corto.rfind('.')
-    if ultimo_punto > 100:
-        resumen_corto = resumen_corto[:ultimo_punto + 1]
-    else:
-        resumen_corto = resumen_corto.rsplit(' ', 1)[0] + "..."
-else:
-    resumen_corto = resumen
+                resumen_corto = cortar_resumen(resumen)
                 mensaje = formatear_mensaje_noticia(titulo.upper(), resumen_corto, nombre_fuente)
                 
                 try:
@@ -354,7 +352,7 @@ async def publicar_tweets(bot):
                 print(f"   ⚠️ Sin tweets")
                 continue
             
-            for entry in feed.entries[:1]:  # Solo el último tweet
+            for entry in feed.entries[:1]:
                 url = entry.link
                 
                 if noticia_ya_enviada(url):
@@ -362,7 +360,6 @@ async def publicar_tweets(bot):
                 
                 texto_tweet = limpiar_html(entry.title)
                 
-                # Filtrar solo tweets relevantes
                 if not es_tweet_relevante(texto_tweet):
                     continue
                 
@@ -405,8 +402,10 @@ async def publicar_tweets(bot):
 async def ejecutar_ciclo():
     bot = Bot(token=TOKEN)
     
+    hora_venezuela = (datetime.utcnow() - timedelta(hours=4)).strftime('%H:%M:%S')
+    
     print(f"\n{'═'*60}")
-    print(f"⏰ [{datetime.now().strftime('%H:%M:%S')}] INICIANDO CICLO")
+    print(f"⏰ [{hora_venezuela}] INICIANDO CICLO")
     print(f"{'═'*60}")
     
     noticias = await publicar_noticias(bot)
