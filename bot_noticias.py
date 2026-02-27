@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 # CONFIGURACIÓN PRINCIPAL
 # ═══════════════════════════════════════════════════════════════════════════════
 
-TOKEN = os.getenv("7933470868:AAE2vYm73cJLTcxMlLDzdVS7oE5Pe2g7xJs")
+TOKEN = os.getenv("TOKEN_TELEGRAM")
 CHAT_ID = os.getenv('CHAT_ID', "@notiglobalve")
 HISTORIAL_FILE = "enviados.txt"
 INTERVALO = int(os.getenv('INTERVALO', '1800'))
