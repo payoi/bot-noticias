@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 # CONFIGURACIÓN PRINCIPAL
 # ═══════════════════════════════════════════════════════════════════════════════
 
-TOKEN = os.getenv('TOKEN_TELEGRAM', "7933470868:AAE2vYm73cJLTcxMlLDzdVS7oE5Pe2g7xJs")
+TOKEN = os.getenv("7933470868:AAE2vYm73cJLTcxMlLDzdVS7oE5Pe2g7xJs")
 CHAT_ID = os.getenv('CHAT_ID', "@notiglobalve")
 HISTORIAL_FILE = "enviados.txt"
 INTERVALO = int(os.getenv('INTERVALO', '1800'))
@@ -28,10 +28,7 @@ INTERVALO = int(os.getenv('INTERVALO', '1800'))
 
 RSS_URLS = [
     "https://www.bancaynegocios.com/feed/",
-    "https://finanzasdigital.com/feed/",
-    "https://www.telesurtv.net/feed/",
 ]
-
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # NOMBRES DE FUENTES
@@ -39,52 +36,11 @@ RSS_URLS = [
 
 NOMBRES_FUENTES = {
     "bancaynegocios.com": "Banca y Negocios",
-    "finanzasdigital.com": "Finanzas Digital",
-    "telesurtv.net": "TeleSUR",
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# FILTROS POR FUENTE
+# IMÁGENES BLOQUEADAS
 # ═══════════════════════════════════════════════════════════════════════════════
-
-# Filtro para Banca y Negocios + Finanzas Digital
-FILTRO_ECONOMIA = [
-    "venezuela", "venezolano", "venezolana", "caracas",
-    "economía", "economia", "económico", "económica",
-    "finanzas", "financiero", "financiera",
-    "banca", "banco", "bancos", "bancario", "bancaria",
-    "banesco", "mercantil", "provincial", "bnc", "bod", "bicentenario",
-    "bcv", "banco central", "sudeban",
-    "dólar", "dolar", "bolívar", "bolivar", "divisas",
-    "tipo de cambio", "tasa de cambio", "paralelo", "oficial",
-    "inflación", "inflacion", "devaluación", "devaluacion",
-    "pago móvil", "pago movil", "pagomovil", "c2p", "p2p",
-    "tarjeta", "crédito", "credito", "débito", "debito",
-    "transferencia", "remesas", "cuenta",
-    "inversión", "inversion", "mercado", "bolsa", "acciones",
-    "pdvsa", "petróleo", "petroleo", "gasolina",
-    "seniat", "impuesto", "iva", "islr", "tributo",
-    "usdt", "binance", "criptomoneda", "bitcoin", "petro",
-]
-
-# Filtro para TeleSUR
-FILTRO_TELESUR = [
-    # Política Venezuela
-    "venezuela", "venezolano", "venezolana", "caracas", "maduro",
-    "gobierno", "asamblea", "diputado", "ministro", "ministerio",
-    "política", "politica", "político", "elecciones", "votación",
-    "constitución", "ley", "decreto", "gaceta",
-    "oposición", "oposicion", "sanciones",
-    
-    # Tecnología
-    "tecnología", "tecnologia", "internet", "digital",
-    "telecomunicaciones", "conectividad", "fibra óptica",
-    "cantv", "movistar", "digitel", "satelital",
-    "5g", "4g", "redes", "ciberseguridad",
-    "app", "aplicación", "software", "innovación",
-    "inteligencia artificial", "starlink",
-]
-
 
 IMAGENES_BLOQUEADAS = [
     'facebook', 'twitter', 'whatsapp', 'instagram', 'linkedin',
@@ -132,24 +88,8 @@ def cortar_resumen(resumen):
 
 
 def es_noticia_relevante(titulo, resumen, fuente):
-    """Filtra noticias según la fuente"""
-    texto_completo = f"{titulo} {resumen}".lower()
-    
-    # Seleccionar filtro según la fuente
-    if fuente == "TeleSUR":
-        palabras = FILTRO_TELESUR
-    else:
-        # Banca y Negocios, Finanzas Digital
-        palabras = FILTRO_ECONOMIA
-    
-    for palabra in palabras:
-        if palabra.lower() in texto_completo:
-            return True
-    
-    return False
-
-
-
+    """Acepta todas las noticias"""
+    return True
 
 
 def noticia_ya_enviada(url):
@@ -241,8 +181,6 @@ def formatear_mensaje_noticia(titulo, resumen, fuente):
         f"📲 <b>@notiglobalve</b>"
     )
     return mensaje
-
-
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
